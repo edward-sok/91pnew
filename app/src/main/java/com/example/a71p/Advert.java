@@ -8,6 +8,8 @@ public class Advert {
     private String description;
     private String date;
     private String location;
+    private double latitude;
+    private double longitude;
 
     public Advert(long id, String type, String name, String phone, String description, String date, String location) {
         this.id = id;
@@ -19,7 +21,6 @@ public class Advert {
         this.location = location;
     }
 
-    // Getter and setter methods for the fields
     public long getId() {
         return id;
     }
@@ -74,5 +75,21 @@ public class Advert {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

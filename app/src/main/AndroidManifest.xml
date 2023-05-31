@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.a71p">
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
 
     <application
-
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -12,8 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.71p"
         tools:targetApi="31">
-        <activity
 
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -22,16 +23,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".CreateAdvertActivity"
             android:label="Create Advert">
         </activity>
-        <activity android:name=".ShowItemsActivity" />
+
+        <activity
+            android:name=".ShowItemsActivity" />
+
         <activity
             android:name=".RemoveItemActivity"
             android:label="Remove Item">
         </activity>
 
-    </application>
 
+        <activity
+            android:name=".MapActivity"
+            android:label="Map Activity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDKrxpjsVyzrox1EnY-Pk9scUKc9RaUB6k" />
+
+    </application>
 </manifest>

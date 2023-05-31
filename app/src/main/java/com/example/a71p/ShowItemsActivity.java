@@ -47,7 +47,6 @@ public class ShowItemsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Refresh the list when the activity is resumed
         adverts = databaseHelper.getAllAdverts();
         adapter.updateList(adverts);
     }
