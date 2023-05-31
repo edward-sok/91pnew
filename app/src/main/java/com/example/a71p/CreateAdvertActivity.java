@@ -95,12 +95,12 @@ public class CreateAdvertActivity extends AppCompatActivity {
         String date = editTextTextPersonName5.getText().toString().trim();
         String location = editTextTextPersonName6.getText().toString().trim();
 
-        // Get latitude and longitude from location string (if available)
+        // get long lat
         double latitude = 0.0;
         double longitude = 0.0;
-        // You can use a geocoding service or library to convert the location to latitude and longitude
 
-        // Save advert details to the database
+
+        // saving advert to database
         long rowId = databaseHelper.insertAdvert(type, name, phone, description, date, location, latitude, longitude);
 
         if (rowId != -1) {
@@ -112,22 +112,22 @@ public class CreateAdvertActivity extends AppCompatActivity {
     }
 
     private void getCurrentLocation() {
-        // Check location permission
+        // location permission check
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            // Get last known location using Fused Location Provider
+            // get last known location
             fusedLocationProviderClient.getLastLocation()
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
                             if (location != null) {
-                                // Update location EditText with latitude and longitude
+                                // update location on texts
                                 editTextTextPersonName6.setText(location.getLatitude() + ", " + location.getLongitude());
                             }
                         }
                     });
         } else {
-            // Request location permission
+
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_CODE_LOCATION_PERMISSION);
@@ -135,15 +135,15 @@ public class CreateAdvertActivity extends AppCompatActivity {
     }
 
     private void openAutocompleteActivity() {
-        // Initialize Places API if not initialized
+        // Initialize Places API
         if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), "AIzaSyDKrxpjsVyzrox1EnY-Pk9scUKc9RaUB6k");
+            Places.initialize(getApplicationContext(), "AIzaSyCEAZzeDvogpdFUROQ2WJDDl4LAbslbwJU");
         }
 
-        // Set the fields to specify the types of place data to return
+        // sets field for place data to reutnr
         List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
 
-        // Start the autocomplete intent
+        // autocomplete start
         Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
                 .build(this);
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
@@ -155,16 +155,14 @@ public class CreateAdvertActivity extends AppCompatActivity {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
-                // Handle the selected place
+                // selected place
                 String address = place.getName();
-                // Update the location EditText or perform other operations
+                // update editext with location
                 editTextTextPersonName6.setText(address);
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 Status status = Autocomplete.getStatusFromIntent(data);
-                // Handle the error
                 Toast.makeText(this, "Error: " + status.getStatusMessage(), Toast.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation
             }
         }
     }
