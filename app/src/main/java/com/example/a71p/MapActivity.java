@@ -1,14 +1,27 @@
 package com.example.a71p;
 
+<<<<<<< HEAD
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+=======
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+>>>>>>> 91p/master
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+<<<<<<< HEAD
 import java.util.ArrayList;
+=======
+
+>>>>>>> 91p/master
 import java.util.List;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -26,10 +39,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
+<<<<<<< HEAD
         advertList = getIntent().getParcelableArrayListExtra("advertList");
     }
 
 
+=======
+        advertList = getAdverts();
+    }
+
+>>>>>>> 91p/master
     @Override
     protected void onResume() {
         super.onResume();
@@ -60,8 +79,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         showAdvertsOnMap();
     }
 
+<<<<<<< HEAD
     private void showAdvertsOnMap() {
         if (googleMap != null && advertList != null && !advertList.isEmpty()) {
+=======
+    private List<Advert> getAdverts() {
+        AdvertDatabaseHelper databaseHelper = new AdvertDatabaseHelper(this);
+        return databaseHelper.getAllAdverts();
+    }
+
+    private void showAdvertsOnMap() {
+        if (googleMap != null && !advertList.isEmpty()) {
+>>>>>>> 91p/master
             for (Advert advert : advertList) {
                 LatLng location = new LatLng(advert.getLatitude(), advert.getLongitude());
                 MarkerOptions markerOptions = new MarkerOptions()
