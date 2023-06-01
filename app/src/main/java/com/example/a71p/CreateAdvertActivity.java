@@ -95,13 +95,16 @@ public class CreateAdvertActivity extends AppCompatActivity {
         String date = editTextTextPersonName5.getText().toString().trim();
         String location = editTextTextPersonName6.getText().toString().trim();
 
-        // get long lat
+        // Get the latitude and longitude values
         double latitude = 0.0;
         double longitude = 0.0;
 
+        // Create a new Advert object with the provided data
+        Advert newAdvert = new Advert(0, type, name, phone, description, date, location, latitude, longitude);
 
-        // saving advert to database
-        long rowId = databaseHelper.insertAdvert(type, name, phone, description, date, location, latitude, longitude);
+        // Save the advert to the database
+        long rowId = databaseHelper.insertAdvert(newAdvert);
+
 
         if (rowId != -1) {
             Toast.makeText(CreateAdvertActivity.this, "Advert details saved", Toast.LENGTH_SHORT).show();
@@ -112,22 +115,22 @@ public class CreateAdvertActivity extends AppCompatActivity {
     }
 
     private void getCurrentLocation() {
-        // location permission check
+        // Check location permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            // get last known location
+            // Get the last known location
             fusedLocationProviderClient.getLastLocation()
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
                             if (location != null) {
-                                // update location on texts
+                                // Update the location in the EditText
                                 editTextTextPersonName6.setText(location.getLatitude() + ", " + location.getLongitude());
                             }
                         }
                     });
         } else {
-
+            // Request location permission
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_CODE_LOCATION_PERMISSION);
@@ -140,10 +143,10 @@ public class CreateAdvertActivity extends AppCompatActivity {
             Places.initialize(getApplicationContext(), "AIzaSyCEAZzeDvogpdFUROQ2WJDDl4LAbslbwJU");
         }
 
-        // sets field for place data to reutnr
+        // Set the fields to be returned by the autocomplete
         List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
 
-        // autocomplete start
+        // Start the autocomplete activity
         Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
                 .build(this);
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
@@ -155,14 +158,15 @@ public class CreateAdvertActivity extends AppCompatActivity {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
-                // selected place
+                // Get the selected place
                 String address = place.getName();
-                // update editext with location
+                // Update the EditText with the location
                 editTextTextPersonName6.setText(address);
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 Status status = Autocomplete.getStatusFromIntent(data);
                 Toast.makeText(this, "Error: " + status.getStatusMessage(), Toast.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_CANCELED) {
+                // Autocomplete activity canceled
             }
         }
     }
@@ -172,6 +176,7 @@ public class CreateAdvertActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CODE_LOCATION_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, get the current location
                 getCurrentLocation();
             } else {
                 Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show();

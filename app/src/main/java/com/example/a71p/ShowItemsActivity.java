@@ -1,53 +1,54 @@
 package com.example.a71p;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import com.example.a71p.AdvertListAdapter;
-
-
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.a71p.Advert;
+import com.example.a71p.AdvertListAdapter;
+import com.example.a71p.AdvertDatabaseHelper;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShowItemsActivity extends AppCompatActivity {
 
-    private ListView itemsListView;
-    private AdvertDatabaseHelper databaseHelper;
-    private List<Advert> adverts;
+    private ListView listView;
     private AdvertListAdapter adapter;
+    private List<Advert> advertList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.items);
 
-        databaseHelper = new AdvertDatabaseHelper(this);
-        adverts = databaseHelper.getAllAdverts();
+        listView = findViewById(R.id.itemslistView);
+        advertList = getAdverts();
 
-        itemsListView = findViewById(R.id.itemsListView);
-        adapter = new AdvertListAdapter(this, adverts);
-        itemsListView.setAdapter(adapter);
+        if (advertList != null) {
+            adapter = new AdvertListAdapter(this, advertList);
+            listView.setAdapter(adapter);
+        } else {
+            Toast.makeText(this, "No adverts available", Toast.LENGTH_SHORT).show();
+        }
 
-        itemsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Advert selectedAdvert = adverts.get(position);
-                Intent intent = new Intent(ShowItemsActivity.this, RemoveItemActivity.class);
-                intent.putExtra("advert_id", selectedAdvert.getId());
-                startActivity(intent);
-            }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Advert selectedAdvert = advertList.get(position);
+            openMapActivity(selectedAdvert);
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        adverts = databaseHelper.getAllAdverts();
-        adapter.updateList(adverts);
+    private List<Advert> getAdverts() {
+        AdvertDatabaseHelper databaseHelper = new AdvertDatabaseHelper(this);
+        return databaseHelper.getAllAdverts();
+    }
+
+    private void openMapActivity(Advert selectedAdvert) {
+        Intent intent = new Intent(ShowItemsActivity.this, MapActivity.class);
+        intent.putParcelableArrayListExtra("advertList", new ArrayList<>(advertList));
+        startActivity(intent);
     }
 }

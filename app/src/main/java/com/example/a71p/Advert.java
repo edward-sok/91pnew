@@ -1,6 +1,9 @@
 package com.example.a71p;
 
-public class Advert {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Advert implements Parcelable {
     private long id;
     private String type;
     private String name;
@@ -11,7 +14,7 @@ public class Advert {
     private double latitude;
     private double longitude;
 
-    public Advert(long id, String type, String name, String phone, String description, String date, String location) {
+    public Advert(long id, String type, String name, String phone, String description, String date, String location, double latitude, double longitude) {
         this.id = id;
         this.type = type;
         this.name = name;
@@ -19,6 +22,50 @@ public class Advert {
         this.description = description;
         this.date = date;
         this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    protected Advert(Parcel in) {
+        id = in.readLong();
+        type = in.readString();
+        name = in.readString();
+        phone = in.readString();
+        description = in.readString();
+        date = in.readString();
+        location = in.readString();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
+    }
+
+    public static final Creator<Advert> CREATOR = new Creator<Advert>() {
+        @Override
+        public Advert createFromParcel(Parcel in) {
+            return new Advert(in);
+        }
+
+        @Override
+        public Advert[] newArray(int size) {
+            return new Advert[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(type);
+        dest.writeString(name);
+        dest.writeString(phone);
+        dest.writeString(description);
+        dest.writeString(date);
+        dest.writeString(location);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
     }
 
     public long getId() {

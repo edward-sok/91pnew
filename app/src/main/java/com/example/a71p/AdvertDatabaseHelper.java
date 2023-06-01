@@ -51,17 +51,17 @@ public class AdvertDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public long insertAdvert(String type, String name, String phone, String description, String date, String location, double latitude, double longitude) {
+    public long insertAdvert(Advert advert) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_TYPE, type);
-        values.put(COLUMN_NAME, name);
-        values.put(COLUMN_PHONE, phone);
-        values.put(COLUMN_DESCRIPTION, description);
-        values.put(COLUMN_DATE, date);
-        values.put(COLUMN_LOCATION, location);
-        values.put(COLUMN_LATITUDE, latitude);
-        values.put(COLUMN_LONGITUDE, longitude);
+        values.put(COLUMN_TYPE, advert.getType());
+        values.put(COLUMN_NAME, advert.getName());
+        values.put(COLUMN_PHONE, advert.getPhone());
+        values.put(COLUMN_DESCRIPTION, advert.getDescription());
+        values.put(COLUMN_DATE, advert.getDate());
+        values.put(COLUMN_LOCATION, advert.getLocation());
+        values.put(COLUMN_LATITUDE, advert.getLatitude());
+        values.put(COLUMN_LONGITUDE, advert.getLongitude());
         return db.insert(TABLE_NAME, null, values);
     }
 
@@ -91,9 +91,7 @@ public class AdvertDatabaseHelper extends SQLiteOpenHelper {
                 double latitude = cursor.getDouble(latitudeColumnIndex);
                 double longitude = cursor.getDouble(longitudeColumnIndex);
 
-                Advert advert = new Advert(id, type, name, phone, description, date, location);
-                advert.setLatitude(latitude);
-                advert.setLongitude(longitude);
+                Advert advert = new Advert(id, type, name, phone, description, date, location, latitude, longitude);
                 adverts.add(advert);
             } while (cursor.moveToNext());
 
@@ -137,9 +135,7 @@ public class AdvertDatabaseHelper extends SQLiteOpenHelper {
                 double latitude = cursor.getDouble(latitudeColumnIndex);
                 double longitude = cursor.getDouble(longitudeColumnIndex);
 
-                advert = new Advert(id, type, name, phone, description, date, location);
-                advert.setLatitude(latitude);
-                advert.setLongitude(longitude);
+                advert = new Advert(id, type, name, phone, description, date, location, latitude, longitude);
             }
 
             cursor.close();
@@ -147,3 +143,4 @@ public class AdvertDatabaseHelper extends SQLiteOpenHelper {
         return advert;
     }
 }
+
